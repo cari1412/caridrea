@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { authHelpers } from '@/lib/auth';
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -16,6 +17,8 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,25 +29,59 @@ export default function RegisterPage() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const validateForm = () => {
     if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match');
-      return;
+      setError('Passwords do not match');
+      return false;
+    }
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return false;
     }
     if (!agreedToTerms) {
-      alert('Please agree to the terms and conditions');
+      setError('Please agree to the terms and conditions');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    if (!validateForm()) {
       return;
     }
     
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const { user, error } = await authHelpers.signUp(
+        formData.email, 
+        formData.password, 
+        formData.firstName, 
+        formData.lastName
+      );
+      
+      if (error) {
+        setError(error.message);
+        setIsLoading(false);
+        return;
+      }
+
+      if (user) {
+        setSuccess('Registration successful! Check your email to confirm your account.');
+        // Можно перенаправить на страницу подтверждения или дашборд
+        setTimeout(() => {
+          router.push('/login');
+        }, 2000);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+    } finally {
       setIsLoading(false);
-      // Redirect to dashboard on successful registration
-      router.push('/dashboard');
-    }, 2000);
+    }
   };
 
   return (
@@ -73,6 +110,20 @@ export default function RegisterPage() {
             <h1 className="text-3xl font-bold text-white mb-2">Create your account</h1>
             <p className="text-gray-400">Join thousands of teams building with SaasKit</p>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+
+          {/* Success Message */}
+          {success && (
+            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+              <p className="text-green-400 text-sm">{success}</p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name Fields */}
@@ -160,7 +211,7 @@ export default function RegisterPage() {
                 </button>
               </div>
               <p className="mt-1 text-sm text-gray-400">
-                Must be at least 8 characters with letters and numbers
+                Must be at least 6 characters long
               </p>
             </div>
 

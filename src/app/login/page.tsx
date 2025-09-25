@@ -3,24 +3,38 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { authHelpers } from '@/lib/auth';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const { user, error } = await authHelpers.signIn(email, password);
+      
+      if (error) {
+        setError(error.message);
+        setIsLoading(false);
+        return;
+      }
+
+      if (user) {
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      setError('Произошла неожиданная ошибка');
+    } finally {
       setIsLoading(false);
-      // Redirect to dashboard on successful login
-      router.push('/dashboard');
-    }, 1500);
+    }
   };
 
   return (
@@ -49,6 +63,13 @@ export default function LoginPage() {
             <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
             <p className="text-gray-400">Sign in to your account to continue</p>
           </div>
+
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
