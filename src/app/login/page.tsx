@@ -30,7 +30,7 @@ export default function LoginPage() {
       if (user) {
         router.push('/dashboard');
       }
-    } catch (err) {
+    } catch {
       setError('Произошла неожиданная ошибка');
     } finally {
       setIsLoading(false);
