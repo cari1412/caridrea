@@ -32,11 +32,11 @@ const FAQ = () => {
     },
     {
       question: "What happens if I exceed my plan limits?",
-      answer: "We'll notify you when you're approaching your limits. You can either upgrade to a higher plan or we'll help you optimize your usage. We never cut off access abruptly - we work with you to find the best solution."
+      answer: "We&apos;ll notify you when you&apos;re approaching your limits. You can either upgrade to a higher plan or we&apos;ll help you optimize your usage. We never cut off access abruptly - we work with you to find the best solution."
     },
     {
       question: "Do you offer refunds?",
-      answer: "We offer a 30-day money-back guarantee for all paid plans. If you're not satisfied within the first 30 days, we'll provide a full refund, no questions asked."
+      answer: "We offer a 30-day money-back guarantee for all paid plans. If you&apos;re not satisfied within the first 30 days, we&apos;ll provide a full refund, no questions asked."
     }
   ];
 
@@ -54,7 +54,7 @@ const FAQ = () => {
             <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"> Questions</span>
           </h2>
           <p className="text-xl text-gray-300 max-w-2xl mx-auto">
-            Got questions? We've got answers. Can't find what you're looking for?
+            Got questions? We&apos;ve got answers. Can&apos;t find what you&apos;re looking for?
           </p>
         </div>
 

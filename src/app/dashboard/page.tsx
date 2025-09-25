@@ -147,7 +147,7 @@ export default function DashboardPage() {
           {/* Welcome Message */}
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-white mb-2">Welcome back, John! 👋</h2>
-            <p className="text-gray-400">Here's what's happening with your projects today.</p>
+            <p className="text-gray-400">Here&apos;s what&apos;s happening with your projects today.</p>
           </div>
 
           {/* Stats Grid */}
@@ -246,7 +246,7 @@ export default function DashboardPage() {
                 </div>
               </div>
               <h3 className="text-white font-semibold mb-2">View Analytics</h3>
-              <p className="text-gray-400 text-sm">Get insights into your team's performance and project metrics.</p>
+              <p className="text-gray-400 text-sm">Get insights into your team&apos;s performance and project metrics.</p>
             </div>
 
             {/* Settings */}
